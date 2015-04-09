@@ -5,8 +5,15 @@
 
     <string name="question_text">Owls fly high!</string>
     <string name="true_button">True</string>
-    <string name="false_button">False</string>"
+    <string name="false_button">False</string>
+    <string name="next_button">Next</string>
 
     <string name="correct_toast">Correct!</string>
     <string name="incorrect_toast">Incorrect!</string>
+
+    <string name="question_owls">Owls fly high!</string>
+    <string name="question_owlcyone">Owlcyone is the home of the owls. </string>
+    <string name="question_ground">The ground is a safe place for owls.</string>
+    <string name="question_sleep">Owls sleep at night.</string>
+    <string name="question_cute">Owls are cute, fuzzy, and funny.</string>
 </resources>
