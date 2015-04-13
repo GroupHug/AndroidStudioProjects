@@ -21,6 +21,8 @@ public class QuizActivity extends ActionBarActivity {
             new TrueFalse(R.string.question_ground, false),
             new TrueFalse(R.string.question_sleep, false),
             new TrueFalse(R.string.question_cute, true),
+            new TrueFalse(R.string.question_wise, true),
+            new TrueFalse(R.string.question_infinity, true)
     };
 
     @Override

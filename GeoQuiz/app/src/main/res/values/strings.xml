@@ -16,4 +16,6 @@
     <string name="question_ground">The ground is a safe place for owls.</string>
     <string name="question_sleep">Owls sleep at night.</string>
     <string name="question_cute">Owls are cute, fuzzy, and funny.</string>
+    <string name="question_wise">Owls are wise!</string>
+    <string name="question_infinity">Owls are guardians of Infinity!</string>
 </resources>
