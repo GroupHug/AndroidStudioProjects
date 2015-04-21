@@ -1,9 +1,19 @@
 <resources>
-    <string name="action_settings">Settings</string>
-    <string name="app_name">Hug</string>
-    <string name="app_title">Hug! :)</string>
+    <string name="action_settings">Options</string>
+    <string name="app_name">Hug! :)</string>
+
     <string name="email">E-mail</string>
     <string name="password">Password</string>
     <string name="login">Go hug!</string>
+    <string name="find">Find hug!</string>
+
+    <string name="title_activity_home">Home Sweet Home</string>
+    <string name="username">Set Hug-name!</string>
+
+    <string name="hello_world">Home Page!</string>
+    <string name="hugs">0 Hugs!</string>
+
+    <string name="hug_me">Hug me!</string>
+
 
 </resources>

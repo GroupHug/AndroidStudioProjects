@@ -1,9 +1,14 @@
-package com.example.samuel.layout;
+package com.example.samuel.webview;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Button;
+import android.webkit.WebView;
+
 
 
 public class MainActivity extends ActionBarActivity {
@@ -11,7 +16,22 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tinder);
+        setContentView(R.layout.activity_main);
+
+        final EditText editText = (EditText)findViewById(R.id.urlEditText);
+        final WebView webView = (WebView)findViewById(R.id.webView);
+        Button button = (Button)findViewById(R.id.goButton);
+
+        webView.loadUrl("https://www.google.com");
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                webView.loadUrl(editText.getText().toString());
+            }
+        });
+
+
     }
 
 

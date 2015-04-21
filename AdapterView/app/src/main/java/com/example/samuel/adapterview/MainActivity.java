@@ -1,9 +1,12 @@
-package com.example.samuel.layout;
+package com.example.samuel.adapterview;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.content.Intent;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -11,7 +14,32 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tinder);
+        setContentView(R.layout.activity_main);
+
+        Button buttonListView = (Button) findViewById(R.id.listViewButton);
+        buttonListView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ListViewActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button buttonSpinner = (Button) findViewById(R.id.spinnerButton);
+        buttonSpinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        Button buttonGallery = (Button) findViewById(R.id.galleryButton);
+        buttonGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
 
