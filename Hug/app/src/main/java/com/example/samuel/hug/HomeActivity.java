@@ -4,14 +4,37 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.content.Intent;
+import android.widget.TextView;
 
 
 public class HomeActivity extends ActionBarActivity {
+    private Button findButton;
+    private TextView hugs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        findButton = (Button)findViewById(R.id.find_button);
+        findButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, FindActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        hugs = (TextView)findViewById(R.id.hugs_textview);
+        hugs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, HugsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 

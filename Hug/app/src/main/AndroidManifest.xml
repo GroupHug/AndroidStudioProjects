@@ -10,7 +10,7 @@
 
         <activity
             android:name=".HugActivity"
-            android:label="@string/app_name" >
+            android:label="@string/title_activity_hug" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,6 +22,22 @@
             android:name=".HomeActivity"
             android:label="@string/title_activity_home" >
         </activity>
+
+        <activity
+            android:name=".FindActivity"
+            android:label="@string/title_activity_find" >
+        </activity>
+
+        <activity
+            android:name=".ProfileActivity"
+            android:label="@string/title_activity_profile" >
+        </activity>
+
+        <activity
+            android:name=".HugsActivity"
+            android:label="@string/title_activity_hugs" >
+        </activity>
+
     </application>
 
 </manifest>
