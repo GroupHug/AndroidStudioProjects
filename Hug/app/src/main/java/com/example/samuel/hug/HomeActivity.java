@@ -7,36 +7,65 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Switch;
 
 
 public class HomeActivity extends ActionBarActivity {
-    private Button findButton;
+    private TextView huggerName;
+    private ImageView huggerPicture;
     private TextView hugs;
+    private Button findButton;
+    private Switch hugSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        huggerName = (TextView)findViewById(R.id.username_textview);
+        huggerName.setOnClickListener(new View.OnClickListener() {
+            // Set user name
+            public void onClick(View v) {
+
+            }
+        });
+
+        huggerPicture = (ImageView)findViewById(R.id.user_imageview);
+        huggerPicture.setOnClickListener(new View.OnClickListener() {
+            // Upload user photo
+            public void onClick(View v) {
+
+            }
+        });
+
+        hugs = (TextView)findViewById(R.id.hugs_textview);
+        hugs.setOnClickListener(new View.OnClickListener() {
+            // See people you've hugged
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, HugsActivity.class);
+                startActivity(intent);
+            }
+        });
+
         findButton = (Button)findViewById(R.id.find_button);
         findButton.setOnClickListener(new View.OnClickListener() {
+            // Search for huggers around
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, FindActivity.class);
                 startActivity(intent);
             }
         });
 
-        hugs = (TextView)findViewById(R.id.hugs_textview);
-        hugs.setOnClickListener(new View.OnClickListener() {
-            @Override
+        hugSwitch = (Switch)findViewById(R.id.hug_switch);
+        hugSwitch.setOnClickListener(new View.OnClickListener() {
+            // Show "Hug me!" on search page
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, HugsActivity.class);
-                startActivity(intent);
+
             }
         });
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

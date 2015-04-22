@@ -16,6 +16,6 @@
 
     <string name="title_activity_find">Find a hugger!</string>
     <string name="title_activity_profile">Check out hugger</string>
-    <string name="title_activity_hugs">Hug museum!</string>
+    <string name="title_activity_hugs">Your hug collection!</string>
 
 </resources>

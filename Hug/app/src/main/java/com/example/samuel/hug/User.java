@@ -6,13 +6,11 @@ package com.example.samuel.hug;
 public class User {
     private String hugger;
     private int photoRes;
-    private int age;
     private int hugs;
 
-    public User(String hugger, int photoRes, int gender, int age, int hugs) {
+    public User(String hugger, int photoRes, int hugs) {
         this.hugger = hugger;
         this.photoRes = photoRes;
-        this.age = age;
         this.hugs = hugs;
     }
 
@@ -22,10 +20,6 @@ public class User {
 
     public int getPhotoRes() {
         return photoRes;
-    }
-
-    public int getAge() {
-        return age;
     }
 
     public int getHugs() {
@@ -38,10 +32,6 @@ public class User {
 
     public void setPhotoRes(int photoRes) {
         this.photoRes = photoRes;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     public void setHugs(int hugs) {

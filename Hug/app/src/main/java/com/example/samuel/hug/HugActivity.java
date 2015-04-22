@@ -24,19 +24,23 @@ public class HugActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hug);
 
-        users = new ArrayList<User>();
-        users.add(new User("Samowl", R.drawable.samowl, 1, 28, 419));
+        users = new ArrayList<User>() {
+            {
+                add(new User("Samowl", R.drawable.samowl, 3));
+                add(new User("Jenowl", R.drawable.jenowl, 5));
+            }
+        };
 
         login = (Button)findViewById(R.id.login_button);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // If E-mail registered, log in. If not, register.
                 if (true) {
                     Intent intent = new Intent(HugActivity.this, HomeActivity.class);
                     startActivity(intent);
                 }
-
             }
         });
     }
