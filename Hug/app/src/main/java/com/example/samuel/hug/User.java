@@ -1,25 +1,34 @@
 package com.example.samuel.hug;
 
+import com.parse.ParseObject;
+import com.parse.ParseFile;
+import com.parse.ParseClassName;
+
 /**
  * Created by Samuel on 4/13/2015.
  */
-public class User {
+@ParseClassName("User")
+public class User extends ParseObject {
     private String hugger;
-    private int photoRes;
+    private ParseFile image;
+    private String message;
     private int hugs;
 
-    public User(String hugger, int photoRes, int hugs) {
+    public User(String hugger, ParseFile image, int hugs) {
         this.hugger = hugger;
-        this.photoRes = photoRes;
+        this.image = image;
         this.hugs = hugs;
+    }
+
+    public User() {
     }
 
     public String getHugger() {
         return hugger;
     }
 
-    public int getPhotoRes() {
-        return photoRes;
+    public ParseFile getImageUrl() {
+        return image;
     }
 
     public int getHugs() {
@@ -30,11 +39,23 @@ public class User {
         this.hugger = hugger;
     }
 
-    public void setPhotoRes(int photoRes) {
-        this.photoRes = photoRes;
+    public void setImageUrl(ParseFile image) {
+        this.image = image;
     }
 
     public void setHugs(int hugs) {
         this.hugs = hugs;
+    }
+
+    public void setUsername() {
+
+    }
+
+    public void setPassword() {
+
+    }
+
+    public void setEmail() {
+
     }
 }

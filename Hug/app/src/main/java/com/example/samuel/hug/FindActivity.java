@@ -4,14 +4,26 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import java.util.List;
+import java.util.ArrayList;
+import android.widget.ListView;
 
 public class FindActivity extends ActionBarActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find);
+
+        final List<User> users = new ArrayList<User>() {{
+            add(new User());
+            add(new User());
+        }};
+
+        ListView listView = (ListView)findViewById(R.id.listView);
+        UserArrayAdapter listAdapter = new UserArrayAdapter(this, users);
+        listView.setAdapter(listAdapter);
     }
 
 

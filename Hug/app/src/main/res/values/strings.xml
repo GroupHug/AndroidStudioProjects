@@ -18,4 +18,6 @@
     <string name="title_activity_profile">Check out hugger</string>
     <string name="title_activity_hugs">Your hug collection!</string>
 
+    <string name="signup_failed">Signup failed</string>
+
 </resources>

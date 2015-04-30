@@ -1,5 +1,6 @@
 package com.example.samuel.hug;
 
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Switch;
 
+import com.parse.Parse;
+import com.parse.ParseObject;
+
 
 public class HomeActivity extends ActionBarActivity {
     private TextView huggerName;
@@ -18,6 +22,15 @@ public class HomeActivity extends ActionBarActivity {
     private TextView hugs;
     private Button findButton;
     private Switch hugSwitch;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +49,7 @@ public class HomeActivity extends ActionBarActivity {
         huggerPicture.setOnClickListener(new View.OnClickListener() {
             // Upload user photo
             public void onClick(View v) {
-
+                dispatchTakePictureIntent();
             }
         });
 
