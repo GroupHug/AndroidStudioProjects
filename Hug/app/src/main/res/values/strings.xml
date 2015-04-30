@@ -6,6 +6,7 @@
     <string name="title_activity_hug">Welcome to Hug!</string>
     <string name="email">E-mail</string>
     <string name="password">Password</string>
+    <string name="signup">Sign up!</string>
     <string name="login">Go hug!</string>
     <string name="find">Find hug!</string>
 
@@ -15,9 +16,14 @@
     <string name="hug_me">Hug me!</string>
 
     <string name="title_activity_find">Find a hugger!</string>
-    <string name="title_activity_profile">Check out hugger</string>
+    <string name="title_activity_profile">Check out hugger!</string>
     <string name="title_activity_hugs">Your hug collection!</string>
+    <string name="title_activity_signup">Become a hugger!</string>
 
     <string name="signup_failed">Signup failed</string>
+    <string name="signup_finish">Finish!</string>
+    <string name="login_failed">Login failed</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

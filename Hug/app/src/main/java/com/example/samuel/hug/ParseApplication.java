@@ -15,16 +15,10 @@ public class ParseApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // Enable local datastore
+        // Initialize Parse and enable local datastore
         Parse.enableLocalDatastore(this);
         Parse.initialize(this, "VItHboPGcuvLhM1fIGNfSYeAmpaI8gZ8kapZzA5e", "pysSJFYVoD9Nqze879M8RPNTj2808uhatinCINNM");
-
-/*        // You need to register the subclass if you want to define your own data class like Professor
-        ParseObject.registerSubclass(Professor.class);
-        Log.i("Application", "Initialized!");*/
-
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
-        testObject.saveInBackground();
+        ParseObject.registerSubclass(User.class);
+        Log.i("Application", "Initialized!");
     }
 }

@@ -46,16 +46,4 @@ public class User extends ParseObject {
     public void setHugs(int hugs) {
         this.hugs = hugs;
     }
-
-    public void setUsername() {
-
-    }
-
-    public void setPassword() {
-
-    }
-
-    public void setEmail() {
-
-    }
 }
