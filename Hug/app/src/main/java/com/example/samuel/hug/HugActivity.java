@@ -28,21 +28,17 @@ public class HugActivity extends ActionBarActivity {
     private Button signup;
     private EditText emailEditText;
     private EditText pwEditText;
-    private boolean initialized = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hug);
 
-        if (!initialized) {
-            // Initialize Parse and enable local datastore
-            Parse.enableLocalDatastore(this);
-            Parse.initialize(this, "VItHboPGcuvLhM1fIGNfSYeAmpaI8gZ8kapZzA5e", "pysSJFYVoD9Nqze879M8RPNTj2808uhatinCINNM");
-            ParseObject.registerSubclass(User.class);
-            Log.i("Application", "Initialized!");
-            initialized = true;
-        }
+        // Initialize Parse and enable local datastore
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(this, "VItHboPGcuvLhM1fIGNfSYeAmpaI8gZ8kapZzA5e", "pysSJFYVoD9Nqze879M8RPNTj2808uhatinCINNM");
+        ParseObject.registerSubclass(User.class);
+        Log.i("Application", "Initialized!");
 
         emailEditText = (EditText)findViewById(R.id.email_edittext);
         pwEditText = (EditText)findViewById(R.id.pw_edittext);

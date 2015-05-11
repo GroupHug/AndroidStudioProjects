@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Hugg</string>
+    <string name="title_activity_main">Share a hugg!</string>
+    <string name="action_settings">Options</string>
+
+    <string name="hugg">Add hugg!</string>
+    <string name="huggs">0 huggs!</string>
+</resources>
