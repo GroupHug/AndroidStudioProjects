@@ -3,6 +3,9 @@
     <string name="title_activity_main">Share a hugg!</string>
     <string name="action_settings">Options</string>
 
-    <string name="hugg">Add hugg!</string>
+    <string name="image_button">Hugg image!</string>
+    <string name="add_button">Add hugg!</string>
     <string name="huggs">0 huggs!</string>
+
+    <string name="add_image">Add a Hugg image!</string>
 </resources>
