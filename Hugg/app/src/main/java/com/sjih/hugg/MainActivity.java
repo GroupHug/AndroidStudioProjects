@@ -1,12 +1,9 @@
 package com.sjih.hugg;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.location.Criteria;
-import android.location.LocationManager;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
@@ -19,7 +16,6 @@ import android.widget.TextView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.*;
@@ -44,11 +40,12 @@ public class MainActivity extends ActionBarActivity {
     private Bitmap huggImage;
     private String name;
     private String message;
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
 
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private GoogleMap map;
     private Marker myMarker;
     private LatLng here;
+    private Location myLocation;
     private List<ParseObject> allData;
 
     @Override
@@ -72,16 +69,10 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         huggsText = (TextView)findViewById(R.id.huggs);
-
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Huggs");
-        query.getInBackground("mmDAL7qnoL", new GetCallback<ParseObject>() {
-            public void done(ParseObject object, ParseException e) {
-                if (e == null) {
-                    // object will be your game score
-                    huggsText.setText(String.valueOf(object.getInt("Huggs")) + " huggs!");
-                } else {
-                    // something went wrong
-                }
+        huggsText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refresh();
             }
         });
 
@@ -106,8 +97,6 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        loadFromLocalParseStore();
-
         huggName = (EditText)findViewById(R.id.hugg_name);
         huggMessage = (EditText)findViewById(R.id.hugg_message);
 
@@ -120,7 +109,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        // Add hugg
+        // Share hugg
         addButton = (Button)findViewById(R.id.add_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,19 +118,22 @@ public class MainActivity extends ActionBarActivity {
                 message = huggMessage.getText().toString();
 
                 if (huggImage != null && name != null && message != null) {
-                    addNewMarker(name, message, here, huggImage);
                     addData(name, message, here.latitude, here.longitude, huggImage); // Send data to Parse
-                    loadFromLocalParseStore(); // Load locally
+                    addNewMarker(name, message, here, huggImage);
 
                     // Update hugg count
                     ParseQuery<ParseObject> query = ParseQuery.getQuery("Huggs");
                     query.getInBackground("mmDAL7qnoL", new GetCallback<ParseObject>() {
                         public void done(ParseObject object, ParseException e) {
                             if (e == null) {
-                                // object will be your game score
                                 object.increment("Huggs");
                                 object.saveInBackground();
-                                huggsText.setText(String.valueOf(object.getInt("Huggs")) + " huggs!");
+                                int count = object.getInt("Huggs");
+
+                                if (count == 1)
+                                    huggsText.setText(String.valueOf(count) + " hugg!");
+                                else
+                                    huggsText.setText(String.valueOf(count) + " huggs!");
                             } else {
                                 // something went wrong
                             }
@@ -150,6 +142,29 @@ public class MainActivity extends ActionBarActivity {
                 }
                 else {
                     Toast.makeText(MainActivity.this, R.string.add_item, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        loadFromLocalParseStore();
+        refresh();
+    }
+
+    public void refresh() {
+        loadAllData();
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Huggs");
+        query.getInBackground("mmDAL7qnoL", new GetCallback<ParseObject>() {
+            public void done(ParseObject object, ParseException e) {
+                if (e == null) {
+                    int count = object.getInt("Huggs");
+
+                    if (count == 1)
+                        huggsText.setText(String.valueOf(count) + " hugg!");
+                    else
+                        huggsText.setText(String.valueOf(count) + " huggs!");
+                } else {
+                    // something went wrong
                 }
             }
         });
@@ -179,9 +194,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void addNewMarker(String title, String snippet, LatLng position, Bitmap icon) {
-        if (myMarker != null) {
+        if (myMarker != null)
             myMarker.remove();
-        }
 
         myMarker = map.addMarker(new MarkerOptions()
                 .title(title)
@@ -190,7 +204,7 @@ public class MainActivity extends ActionBarActivity {
                 .icon(BitmapDescriptorFactory.fromBitmap(icon))
         );
 
-        CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(here, 7); // Second parameter is float zoom
+        CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(here, 21); // Second parameter is float zoom 2-21
         map.animateCamera(cu);
     }
 
@@ -237,7 +251,7 @@ public class MainActivity extends ActionBarActivity {
         }
         LatLngBounds bounds = builder.build();
 
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 7);
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 12); // Number is padding
         map.animateCamera(cu);
     }
 
@@ -251,9 +265,8 @@ public class MainActivity extends ActionBarActivity {
             public void done(List<ParseObject> list, ParseException e) {
                 allData = list;
 
-                if (allData != null && allData.size() > 0) {
+                if (allData != null && allData.size() > 0)
                     loadAllData();
-                }
             }
         });
     }
