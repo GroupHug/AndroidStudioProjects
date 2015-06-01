@@ -1,11 +1,14 @@
 <resources>
     <string name="app_name">Hugg</string>
     <string name="title_activity_main">Share a hugg!</string>
-    <string name="action_settings">Options</string>
+    <string name="action_settings">About</string>
 
     <string name="image_button">Hugg image!</string>
     <string name="add_button">Add hugg!</string>
-    <string name="huggs">0 huggs!</string>
+    <string name="huggs">Loading huggs...</string>
 
-    <string name="add_image">Add a Hugg image!</string>
+    <string name="add_item">Something is missing</string>
+    <string name="dialog_message">Please be sure to only share pictures of real hugs and to be courteous and respectful to other users by refraining from sharing anything that others may find offensive.</string>
+    <string name="dialog_affirm">Ok!</string>
+    <string name="test">Test</string>
 </resources>

@@ -1,14 +1,19 @@
 package com.sjih.hugg;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.location.Criteria;
+import android.location.LocationManager;
 import android.provider.MediaStore;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.util.Log;
 
 import android.widget.TextView;
 import android.view.View;
@@ -22,8 +27,13 @@ import com.google.android.gms.maps.model.*;
 import com.google.android.gms.maps.GoogleMap;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
     private TextView huggsText;
@@ -37,9 +47,9 @@ public class MainActivity extends ActionBarActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private GoogleMap map;
+    private Marker myMarker;
     private LatLng here;
-    private int huggs;
-    private ParseObject updateObject;
+    private List<ParseObject> allData;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -48,8 +58,12 @@ public class MainActivity extends ActionBarActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             huggImage = (Bitmap)extras.get("data");
-            //imageView.setImageBitmap(huggImage);
         }
+    }
+
+    public void confirmHuggAlert() {
+        DialogFragment newFragment = new HuggAlert();
+        newFragment.show(getSupportFragmentManager(), "missiles");
     }
 
     @Override
@@ -59,18 +73,12 @@ public class MainActivity extends ActionBarActivity {
 
         huggsText = (TextView)findViewById(R.id.huggs);
 
-        //ParseObject testObject = new ParseObject("Huggs");
-        //testObject.put("Huggs", 0);
-        //testObject.saveInBackground();
-
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Huggs");
         query.getInBackground("mmDAL7qnoL", new GetCallback<ParseObject>() {
             public void done(ParseObject object, ParseException e) {
                 if (e == null) {
                     // object will be your game score
-                    updateObject = object;
-                    huggs = object.getInt("Huggs");
-                    huggsText.setText(String.valueOf(huggs));
+                    huggsText.setText(String.valueOf(object.getInt("Huggs")) + " huggs!");
                 } else {
                     // something went wrong
                 }
@@ -98,8 +106,12 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        loadFromLocalParseStore();
+
         huggName = (EditText)findViewById(R.id.hugg_name);
         huggMessage = (EditText)findViewById(R.id.hugg_message);
+
+        // Add hugg image
         imageButton = (Button)findViewById(R.id.image_button);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +120,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        // Add hugg
         addButton = (Button)findViewById(R.id.add_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,31 +128,134 @@ public class MainActivity extends ActionBarActivity {
                 name = huggName.getText().toString();
                 message = huggMessage.getText().toString();
 
-                huggs += 1;
-                updateObject.put("Huggs", huggs);
-                updateObject.saveInBackground();
-
                 if (huggImage != null && name != null && message != null) {
-                    map.addMarker(new MarkerOptions()
-                            .title(name)
-                            .snippet(message)
-                            .position(here)
-                            .icon(BitmapDescriptorFactory.fromBitmap(huggImage)));
+                    addNewMarker(name, message, here, huggImage);
+                    addData(name, message, here.latitude, here.longitude, huggImage); // Send data to Parse
+                    loadFromLocalParseStore(); // Load locally
+
+                    // Update hugg count
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("Huggs");
+                    query.getInBackground("mmDAL7qnoL", new GetCallback<ParseObject>() {
+                        public void done(ParseObject object, ParseException e) {
+                            if (e == null) {
+                                // object will be your game score
+                                object.increment("Huggs");
+                                object.saveInBackground();
+                                huggsText.setText(String.valueOf(object.getInt("Huggs")) + " huggs!");
+                            } else {
+                                // something went wrong
+                            }
+                        }
+                    });
                 }
                 else {
-                    Toast.makeText(MainActivity.this, R.string.add_image, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.add_item, Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }
 
-    private void dispatchTakePictureIntent() {
+    public void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
+    }
+
+    private void addData(String title, String snippet, double lat, double lon, Bitmap icon) {
+        ParseObject object = new ParseObject("Markers");
+        object.put("Name", title);
+        object.put("Message", snippet);
+        object.put("Latitude", lat);
+        object.put("Longitude", lon);
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        icon.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        object.put("Image", byteArray);
+        object.saveInBackground();
+    }
+
+    private void addNewMarker(String title, String snippet, LatLng position, Bitmap icon) {
+        if (myMarker != null) {
+            myMarker.remove();
+        }
+
+        myMarker = map.addMarker(new MarkerOptions()
+                .title(title)
+                .snippet(snippet)
+                .position(position)
+                .icon(BitmapDescriptorFactory.fromBitmap(icon))
+        );
+
+        CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(here, 7); // Second parameter is float zoom
+        map.animateCamera(cu);
+    }
+
+    private void loadAllData() {
+        Log.i("TEST", "Loading data remotely!");
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Markers");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                allData = list;
+
+                if (allData != null)
+                    ParseObject.pinAllInBackground(allData);
+
+                addAllMarkers();
+            }
+        });
+    }
+
+    private void addAllMarkers() {
+        List<MarkerOptions> markers = new ArrayList<MarkerOptions>();
+        byte[] image;
+        Bitmap bitmap;
+
+        for (ParseObject object : allData) {
+            image = (byte[])object.get("Image");
+            bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+
+            MarkerOptions marker = new MarkerOptions()
+                    .title(object.get("Name").toString())
+                    .snippet(object.get("Message").toString())
+                    .position(new LatLng(object.getDouble("Latitude"), object.getDouble("Longitude")))
+                    .icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+            markers.add(marker);
+        }
+
+        map.clear(); // Clear map
+        LatLngBounds.Builder builder = new LatLngBounds.Builder(); // Set bounds
+
+        for (MarkerOptions marker : markers) {
+            Marker m = map.addMarker(marker);
+            builder.include(m.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 7);
+        map.animateCamera(cu);
+    }
+
+    private void loadFromLocalParseStore() {
+        Log.i("TEST", "Loading data locally!");
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Markers");
+        query.fromLocalDatastore();
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                allData = list;
+
+                if (allData != null && allData.size() > 0) {
+                    loadAllData();
+                }
+            }
+        });
     }
 
     @Override
